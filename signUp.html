@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>회원가입</title>
+</head>
+
+<body>
+   <form action="signUpProcess.php" method="post" id="signForm">
+      <fieldset>
+         <legend>회원가입</legend>
+         <p><input type="text" id="email" maxlenght="50" name="email" placeholder="이메일" required></p>
+         <p><input type="password" id="password" name="password" placeholder="비밀번호" required></p>
+         <p><input type="password" id="checkPassword" placeholder="비밀번호 확인" required></p>
+         <div id="result"></div>
+      </fieldset>
+   </form>
+   <p><button onclick="validateId()">회원가입</button></p>
+
+
+   <script>
+      function emailCheck(id) {
+         //이메일 형식 정규표현식
+         email_regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i;
+         if (!email_regex.test(id)) {
+            return false;
+         } else {
+            return true;
+         }
+      }
+      function validateId() {
+         var emailInput = document.getElementById("email");
+         var resultDiv = document.getElementById("result");
+
+         var email = emailInput.value;
+         var password = document.getElementById("password").value;
+         var checkPassword = document.getElementById("checkPassword").value;
+
+         if (emailCheck(email)) {
+            if (password != '' && password === checkPassword) {
+               document.getElementById("signForm").submit();
+            } else {
+               resultDiv.innerHTML = "비밀번호가 입력되지 않았거나 서로 다릅니다."
+            }
+         } else {
+            resultDiv.innerHTML = "잘못된 이메일 주소입니다."
+         }
+
+      }
+   </script>
+</body>
+
+</html>

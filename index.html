@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>게시판</title>
+
+
+   <style>
+      #borderHead {
+         height: 100px;
+         width: 1000px;
+         margin: 0 auto;
+         text-align: left;
+      }
+
+      #banner {
+         height: 50px;
+         background-color: rgb(42, 134, 84);
+         text-align: center;
+         color: azure;
+      }
+
+      #borderBody {
+         margin: 0 auto;
+         width: 1000px;
+      }
+   </style>
+</head>
+
+<body>
+
+   <div id="borderHead">
+      낚시 게시판
+   </div>
+   <div id="login"><a href="signIn.html">로그인</a></div>
+   <div id="reg"><a href="signUp.html">회원가입</a></div>
+   <div id="user"><?=$_GET['id']."님 반갑습니다."?></div>
+   <div id="user"></div>
+   <div id="banner">
+      <a href="">ddd</a> <a href="">ddd</a> <a href="">ddd</a> <a href="">ddd</a>
+   </div>
+   <div id="borderBody">
+      <table border="1" style="text-align: center; width: 1000px;">
+         <th>글 번호</th>
+         <th>말머리</th>
+         <th>글 제목</th>
+         <th>글 내용</th>
+         <th>작성자</th>
+         <th>작성일</th>
+         <th>조회</th>
+         <th>추천</th>
+         <tr>
+            <td>1</td>
+            <td>공지</td>
+            <td>안녕하세요 출첵합니다</td>
+            <td>오랜만에 출첵합니다. 첫 글이네요</td>
+            <td>운영자</td>
+            <td>24.02.19</td>
+            <td>1</td>
+            <td>1</td>
+         </tr>
+      </table>
+   </div>
+</body>
+
+</html>
