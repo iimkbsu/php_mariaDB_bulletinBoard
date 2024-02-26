@@ -1,47 +1,57 @@
+<?php
+   $conn = mysqli_connect('127.0.0.1','root','620328','bulletin');
+   $sql = "SELECT * FROM notice ORDER BY idx DESC";
+   $result = mysqli_query($conn, $sql);
+
+   $list=null;
+
+   while($noticeBoard = mysqli_fetch_array($result)) {
+      if($noticeBoard['head'] == 'notice') {
+         $noticeBoard['head'] = '공지';
+      }else if($noticeBoard['head'] == 'normal') {
+         $noticeBoard['head'] = '일반';
+      }else if($noticeBoard['head'] == 'question') {
+         $noticeBoard['head'] = '질문';
+      }else if($noticeBoard['head'] == 'vote') {
+         $noticeBoard['head'] = '투표';
+      }else {
+         $noticeBoard['head'] = '테스트';
+      }
+      $list .= "<tr>
+      <td>{$noticeBoard['idx']}</td>
+      <td>{$noticeBoard['head']}</td>
+      <td><a href='bulletinBoard_main.html?idx={$noticeBoard['idx']}'>{$noticeBoard['title']}</a></td>
+      <td>{$noticeBoard['description']}</td>
+      <td>{$noticeBoard['writer']}</td>
+      <td>{$noticeBoard['created']}</td>
+      <td>{$noticeBoard['checked']}</td>
+      <td>{$noticeBoard['rec']}</td>
+   </tr>";
+   }
+
+?>
+
 <!DOCTYPE html>
 <html lang="ko">
-
 <head>
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <title>게시판</title>
-
-
-   <style>
-      #borderHead {
-         height: 100px;
-         width: 1000px;
-         margin: 0 auto;
-         text-align: left;
-      }
-
-      #banner {
-         height: 50px;
-         background-color: rgb(42, 134, 84);
-         text-align: center;
-         color: azure;
-      }
-
-      #borderBody {
-         margin: 0 auto;
-         width: 1000px;
-      }
-   </style>
 </head>
-
 <body>
-
-   <div id="borderHead">
-      낚시 게시판
+   <div>
+      <h1>게시판</h1>
    </div>
-   <div id="login"><a href="signIn.html">로그인</a></div>
-   <div id="reg"><a href="signUp.html">회원가입</a></div>
-   <div id="user"><?=$_GET['id']."님 반갑습니다."?></div>
-   <div id="user"></div>
-   <div id="banner">
-      <a href="">ddd</a> <a href="">ddd</a> <a href="">ddd</a> <a href="">ddd</a>
+   <div style="border: 1px solid black; width: 300px; margin-bottom: 20px; text-align: center;">
+      <h3><a href="login.html">로그인</a></h3>
+      <h3><a href="regi.html">회원가입</a></h3>
+      <h3><a href="logout.php">로그아웃</a></h3>
    </div>
-   <div id="borderBody">
+   <!-- <div>
+      <p id="hello"><?= $_GET['id'].' 님'?> 반갑습니다</p>
+   </div> -->
+   <div><a href="write.html">글 쓰기</a></div>
+   <div>
       <table border="1" style="text-align: center; width: 1000px;">
          <th>글 번호</th>
          <th>말머리</th>
@@ -51,18 +61,9 @@
          <th>작성일</th>
          <th>조회</th>
          <th>추천</th>
-         <tr>
-            <td>1</td>
-            <td>공지</td>
-            <td>안녕하세요 출첵합니다</td>
-            <td>오랜만에 출첵합니다. 첫 글이네요</td>
-            <td>운영자</td>
-            <td>24.02.19</td>
-            <td>1</td>
-            <td>1</td>
-         </tr>
+         <?=$list?>
       </table>
    </div>
+   
 </body>
-
 </html>
