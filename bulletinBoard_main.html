@@ -1,4 +1,7 @@
 <?php
+session_cache_limiter('');	
+session_start();
+
 $conn = mysqli_connect('127.0.0.1', 'root', '620328', 'bulletin');
 $sql = "SELECT * FROM notice WHERE idx={$_GET['idx']}";
 $result = mysqli_query($conn, $sql);

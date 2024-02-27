@@ -1,23 +1,67 @@
 <?php
-$conn = mysqli_connect('127.0.0.1','root','620328','bulletin');
-$sql = "SELECT * FROM user WHERE id='{$_POST['id']}' AND pw='{$_POST['pw']}'";
-$result = mysqli_query($conn, $sql);
 
-$data = mysqli_fetch_array($result);
+//세션 사용
+session_cache_limiter('');
+session_start();
 
-$id = $data['id'];
-$pw = $data['pw'];
 
-if ($data == '') {
-   echo "로그인하는 과정에서 문제가 생겼습니다. 관리자에게 문의해주세요";
-   //error_log(mysqli_error($conn));
+//DB 접속 정보
+$dbid = 'root';
+$dbpw = '620328';
+$dbname = 'bulletin';
+$dbhost = '127.0.0.1';
+$conn = mysqli_connect($dbhost, $dbid, $dbpw, $dbname);
+
+//POST 방식으로 받은 id, pw 입력값 초기화
+$id = $_POST['id'];
+$pw = $_POST['pw'];
+
+//id 대조하여 DB에서 id가져오기
+$getID = "SELECT id FROM user WHERE id='$id'";
+$getID = mysqli_query($conn, $getID);
+$getID = mysqli_fetch_array($getID);
+$getSessionToken = null;
+
+//id가 있다면
+if ($getID['id']) {
+   //id에서 비밀번호 가져오기
+   $getPW = "SELECT pw FROM user WHERE id='$id'";
+   $getPW = mysqli_query($conn, $getPW);
+   $getPW = mysqli_fetch_array($getPW);
+   $PassWord = $getPW['pw'];
+
+   //DB에서 가져온 pw와 입력된 pw가 같다면
+   if ($PassWord == $pw) {
+      //64자리 무작위 토큰 생성(로그인 대조에 사용)
+      $key = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789^/';
+      for ($i = 0; $i <= 63; $i++) {
+         $token .= $key[rand(0, 63)];
+      }
+      //생성된 토큰을 DB에 업데이트
+      $updateToken = "UPDATE user SET token='$token' WHERE id='$id'";
+      $updateToken = mysqli_query($conn, $updateToken);
+
+      //세션에 토큰 키 값 등록
+      $_SESSION['token'] = $token;
+      $getSessionToken = $_SESSION['token'];
+      $_SESSION['id'] = $id;
+
+      echo "<script>alert('로그인 완료');
+      window.location.href='index.html';
+      </script>";
+
+      return 0;
+   } else {
+      echo "<script>alert('비밀번호가 틀립니다.');
+      window.location.href='login.html';
+      </script>";
+      return 1;
+   }
 } else {
-   echo "<script>alert('로그인 완료');
-      window.location.href='index.html?id={$id}';</script>";
-
-   //header("LOCATION:index.php");
-
+   echo "<script>alert('등록되지 않은 아이디입니다.');
+   window.location.href='login.html';
+   </script>";
+   return 1;
 }
-
 
 ?>
