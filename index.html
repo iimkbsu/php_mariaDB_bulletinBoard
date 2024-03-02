@@ -1,5 +1,5 @@
 <?php
-session_cache_limiter('');	
+session_cache_limiter('');
 session_start();
 
 //DB 접속 정보
@@ -55,6 +55,29 @@ while ($noticeBoard = mysqli_fetch_array($result)) {
 
 }
 
+function loged() {
+   if(isset($_SESSION['id'])) {
+      return true;
+   }else {
+      return false;
+   }
+}
+
+function loged1() {
+   if (loged() == false) {
+      echo "<h3><a href=\"login.html\">로그인</a></h3>
+      <h3><a href=\"regi.html\">회원가입</a></h3>";
+   } else {
+      echo "<h3><a href=\"logout.php\">로그아웃</a></h3>";
+   }
+}
+
+function loged2() {
+   if(loged() == true) {
+      echo "<div>내 글 검색</div>";
+   }
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -71,28 +94,27 @@ while ($noticeBoard = mysqli_fetch_array($result)) {
       <h1><a href="index.html">게시판</a></h1>
    </div>
    <div style="border: 1px solid black; width: 300px; margin-bottom: 20px; text-align: center;">
-   <?php
-      if(!isset($_SESSION['id'])) {
-         echo "<h3><a href=\"login.html\">로그인</a></h3>
-         <h3><a href=\"regi.html\">회원가입</a></h3>";
-      }else {
-         echo "<h3><a href=\"logout.php\">로그아웃</a></h3>";
-      }
-   ?>
-       
-   </div>
-<div>
-      <p id="hello">
-         <?php 
+      <?php
+      loged1();
+      ?>
 
-         if(isset($_SESSION['id'])) {
+   </div>
+   <div>
+      <p id="hello">
+         <?php
+
+         if (isset($_SESSION['id'])) {
             echo "{$_SESSION['id']} 님 반갑습니다.";
-         }else {
+         } else {
             echo "비회원 고객님 반갑습니다.";
          }
-        ?> </p>
+         ?>
+      </p>
    </div>
    <div><a href="write.html">글 쓰기</a></div>
+   <?php
+   loged2();
+   ?>
    <div>
       <table border="1" style="text-align: center; width: 1000px;">
          <th>글 번호</th>
