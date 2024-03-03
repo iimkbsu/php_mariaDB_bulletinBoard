@@ -12,12 +12,12 @@
       <form action="regiProcess.php" method="post">
          <fieldset>
             <legend>회원가입</legend>
-            <p><input type="text" placeholder="아이디" name="id" required></p>
-            <p><input type="password" placeholder="비밀번호" name="pw" required></p>
-            <p><input type="text" placeholder="이름" name="name" required></p>
-            <p><input type="tel" placeholder="전화번호" name="phone" required></p>
-            <p><input type="text" placeholder="이메일" name="email" required></p>
-            <p><input type="text" placeholder="프로필" name="profile"></p>
+            <p><input type="text" placeholder="아이디" name="id" id="legiName" autocomplete="off" required> <input type="button" value="중복체크" onclick="checkID()"></p>
+            <p><span id="decide">ID 중복체크를 진행해주세요.</span></p>
+            <p><input type="password" placeholder="비밀번호" name="pw" autocomplete="off" required></p>
+            <p><input type="text" placeholder="이름" name="name" autocomplete="off" required></p>
+            <p><input type="text" placeholder="이메일" name="email" autocomplete="off" required></p>
+            <p><textarea placeholder="프로필" name="profile"></textarea></p>
             <p><input type="submit" value="회원가입"></p>
          </fieldset>
       </form>
@@ -26,6 +26,24 @@
       <p><a href="login.html">로그인하러 가기</a></p>
    </div>
    <div><a href="index.html">X</a></div>
+
+
+   <br><hr>1. 이메일 중복검사 할지 여부 결정 <br>2. 중복체크 누르기 전에 회원가입하면 회원가입 막기 및 빨간 글씨로 중복체크 진행 표시 및 <br>3. 회원가입 누르면 바로 회원가입하지말고 입력한 이메일로 가입 링크 전송 후 링크 누르면 회원가입 완료
+
+
+   <script>
+      function checkID() {
+
+         var id = document.getElementById("legiName").value;
+         if(id == '') {
+            alert("아이디를 입력해주세요");
+         }else {
+            window.open("checkid.php?id=" + document.getElementById("legiName").value, "chkid", 'status=no, height=300, width=500');
+
+         }
+      }
+   </script>
+
 </body>
 
 </html>
