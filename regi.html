@@ -5,20 +5,22 @@
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <title>회원가입</title>
+
 </head>
 
 <body>
    <div>
-      <form action="regiProcess.php" method="post">
+      <form action="regiProcess.php" method="post" autocomplete="off">
          <fieldset>
             <legend>회원가입</legend>
-            <p><input type="text" placeholder="아이디" name="id" id="legiName" autocomplete="off" required> <input type="button" value="중복체크" onclick="checkID()"></p>
-            <p><span id="decide">ID 중복체크를 진행해주세요.</span></p>
-            <p><input type="password" placeholder="비밀번호" name="pw" autocomplete="off" required></p>
-            <p><input type="text" placeholder="이름" name="name" autocomplete="off" required></p>
-            <p><input type="text" placeholder="이메일" name="email" autocomplete="off" required></p>
+            <p><input type="text" placeholder="아이디" id="userID" required> <input type="button" id="check_btn" value="중복체크" onclick="checkID()"></p>
+            <p><input type="hidden" name="decide_id" id="decide_id">
+            <p><span id="decide" style="color:red">ID 중복체크를 꼭 해주세요.</span></p>
+            <p><input type="password" id="password" placeholder="비밀번호" name="pw"  required> <span><input type="button" onmouseover="showPW()" onmouseout="hidePW()" value="비밀번호 보기"></span> </p>
+            <p><input type="text" placeholder="이름" name="name" required></p>
+            <p><input type="text" placeholder="이메일" name="email" required></p>
             <p><textarea placeholder="프로필" name="profile"></textarea></p>
-            <p><input type="submit" value="회원가입"></p>
+            <p><input type="submit" id="regi_btn" value="회원가입" disabled="true"></p>
          </fieldset>
       </form>
    </div>
@@ -28,19 +30,43 @@
    <div><a href="index.html">X</a></div>
 
 
-   <br><hr>1. 이메일 중복검사 할지 여부 결정 <br>2. 중복체크 누르기 전에 회원가입하면 회원가입 막기 및 빨간 글씨로 중복체크 진행 표시 및 <br>3. 회원가입 누르면 바로 회원가입하지말고 입력한 이메일로 가입 링크 전송 후 링크 누르면 회원가입 완료
-
-
    <script>
       function checkID() {
 
-         var id = document.getElementById("legiName").value;
+         var id = document.getElementById("userID").value;
          if(id == '') {
             alert("아이디를 입력해주세요");
          }else {
-            window.open("checkid.php?id=" + document.getElementById("legiName").value, "chkid", 'status=no, height=300, width=500');
+            window.open("checkid.php?id=" + document.getElementById("userID").value, "chkid", 'status=no, height=300, width=500');
 
          }
+      }
+
+      //checkid.php의 opener.parent.decide()로 실행
+      function decide() {
+         document.getElementById("decide").innerHTML = "<span style='color:blue;'>사용 가능한 ID 입니다.</span>";
+         document.getElementById("decide_id").value = document.getElementById("userID").value;
+         document.getElementById("userID").disabled = true;
+         document.getElementById("regi_btn").disabled = false;
+         document.getElementById("check_btn").value = "다른 ID로 변경";
+         document.getElementById("check_btn").setAttribute("onclick", "change()");
+      }
+
+      //checkid.php의 opener.parent.change()로 실행
+      function change() {
+         document.getElementById("decide").innerHTML = "<span style='color:red;'>ID 중복 여부를 확인해주세요.</span>";
+         document.getElementById("userID").disabled = false;
+         document.getElementById("userID").value = '';
+         document.getElementById("regi_btn").disabled = true;
+         document.getElementById("check_btn").value = "ID 중복 검사";
+         document.getElementById("check_btn").setAttribute("onclick", "checkID()");
+      }
+
+      function showPW() {
+         document.getElementById("password").type = "text";
+      }
+      function hidePW() {
+         document.getElementById("password").type = "password";
       }
    </script>
 
