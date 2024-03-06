@@ -6,6 +6,9 @@
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <title>회원가입</title>
 
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+
 </head>
 
 <body>
@@ -13,13 +16,30 @@
       <form action="regiProcess.php" method="post" autocomplete="off">
          <fieldset>
             <legend>회원가입</legend>
-            <p><input type="text" placeholder="아이디" id="userID" required> <input type="button" id="check_btn" value="중복체크" onclick="checkID()"></p>
+
+            <p>
+               <input type="text" placeholder="아이디" id="userID" required>
+               <input type="button" id="check_btn" value="중복체크" onclick="checkID()">
+            </p>
+
             <p><input type="hidden" name="decide_id" id="decide_id">
             <p><span id="decide" style="color:red">ID 중복체크를 꼭 해주세요.</span></p>
-            <p><input type="password" id="password" placeholder="비밀번호" name="pw"  required> <span><input type="button" onmouseover="showPW()" onmouseout="hidePW()" value="비밀번호 보기"></span> </p>
-            <p><input type="text" placeholder="이름" name="name" required></p>
-            <p><input type="text" placeholder="이메일" name="email" required></p>
+
+            <p>
+               <input type="password" id="password" placeholder="비밀번호" name="pw" required>
+               <span><input type="button" onmouseover="showPW()" onmouseout="hidePW()" value="비밀번호 보기"></span>
+            </p>
+            <p><input type="text" placeholder="이름 (본명을 입력해주세요)" name="name" required></p>
+
+
+            <p>
+               <input type="text" id="email" placeholder="이메일 (비밀번호 찾기용)" name="email" required>
+               <span><input type="button" id="sendEmail" value="이메일 보내기"></span>
+            </p>
+            <p><input type="number" id="randomNumberInput" placeholder="6자리 번호" required hidden></p>
+
             <p><textarea placeholder="프로필" name="profile"></textarea></p>
+
             <p><input type="submit" id="regi_btn" value="회원가입" disabled="true"></p>
          </fieldset>
       </form>
@@ -34,20 +54,23 @@
       function checkID() {
 
          var id = document.getElementById("userID").value;
-         if(id == '') {
+         if (id == '') {
             alert("아이디를 입력해주세요");
-         }else {
+         } else {
             window.open("checkid.php?id=" + document.getElementById("userID").value, "chkid", 'status=no, height=300, width=500');
 
          }
       }
+
+      let regi_btn_disabled_key1 = 1;
 
       //checkid.php의 opener.parent.decide()로 실행
       function decide() {
          document.getElementById("decide").innerHTML = "<span style='color:blue;'>사용 가능한 ID 입니다.</span>";
          document.getElementById("decide_id").value = document.getElementById("userID").value;
          document.getElementById("userID").disabled = true;
-         document.getElementById("regi_btn").disabled = false;
+         //document.getElementById("regi_btn").disabled = false;
+         regi_btn_disabled_key1 = 0;
          document.getElementById("check_btn").value = "다른 ID로 변경";
          document.getElementById("check_btn").setAttribute("onclick", "change()");
       }
@@ -57,7 +80,8 @@
          document.getElementById("decide").innerHTML = "<span style='color:red;'>ID 중복 여부를 확인해주세요.</span>";
          document.getElementById("userID").disabled = false;
          document.getElementById("userID").value = '';
-         document.getElementById("regi_btn").disabled = true;
+         //document.getElementById("regi_btn").disabled = true;
+         regi_btn_disabled_key1 = 1;
          document.getElementById("check_btn").value = "ID 중복 검사";
          document.getElementById("check_btn").setAttribute("onclick", "checkID()");
       }
@@ -68,6 +92,52 @@
       function hidePW() {
          document.getElementById("password").type = "password";
       }
+
+
+
+      let randomNumber;
+
+      $(document).ready(function () {
+         $("#sendEmail").click(function () {
+
+            if ($("#email").val() == '') {
+               alert("이메일을 입력하세요.");
+            } else {
+               randomNumber = Number(Math.floor(100000 + Math.random() * 900000));
+
+               var email = $("#email").val();
+               $("#randomNumberInput").prop('hidden', false);
+
+               $.ajax({
+                  url: 'checkEmail.php',
+                  type: 'POST',
+                  data: { email: email, randomNumber: randomNumber },
+                  success: function (response) {
+                     alert(response);
+                  },
+                  error: function (xhr, status, error) {
+                     console.error(xhr.responseText);
+                  }
+               });
+            }
+         })
+      })
+
+
+
+      $("#randomNumberInput").keyup(function () {
+         var randomKey = Number($("#randomNumberInput").val());
+
+
+         if (randomKey === randomNumber && regi_btn_disabled_key1 == 0) {
+            document.getElementById("regi_btn").disabled = false;
+         } else {
+            $("#regi_btn").prop('disabled', true);
+         }
+
+      });
+
+
    </script>
 
 </body>

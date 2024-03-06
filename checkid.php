@@ -15,20 +15,36 @@ $result = mysqli_query($conn, $sql);
 $arr = mysqli_fetch_array($result);
 ?>
 
-<?php
 
-if (!$arr) {
-   echo "<span style='color:blue;'>$userid</span>는 사용 가능한 아이디입니다.";
+
+
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title></title>
+</head>
+
+<body>
+   <?php
+
+   if (!$arr) {
+      echo "<span style='color:blue;'>$userid</span>는 사용 가능한 아이디입니다.";
+      ?>
+      <p><input type="button" value="이 ID 사용" onclick="opener.parent.decide(); window.close();"></p>
+
+      <?php
+      // echo "<script>alert('이미 가입된 아이디입니다.'); self.close();</script>";
+   } else {
+      echo "<span style='color:red;'>$userid</span>는 이미 가입된 아이디입니다."; ?>
+      <p><input type="button" value="다른 ID 사용" onclick="opener.parent.change(); window.close();"></p>
+
+      <?php
+      // echo "<script>alert('사용 가능한 아이디입니다.'); self.close();</script>";
+   }
    ?>
-   <p><input type="button" value="이 ID 사용" onclick="opener.parent.decide(); window.close();"></p>
+</body>
 
-   <?php
-   // echo "<script>alert('이미 가입된 아이디입니다.'); self.close();</script>";
-} else {
-   echo "<span style='color:red;'>$userid</span>는 이미 가입된 아이디입니다."; ?>
-   <p><input type="button" value="다른 ID 사용" onclick="opener.parent.change(); window.close();"></p>
-
-   <?php
-   // echo "<script>alert('사용 가능한 아이디입니다.'); self.close();</script>";
-}
-?>
+</html>

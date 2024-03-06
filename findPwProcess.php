@@ -23,7 +23,7 @@ if (isset($arr)) {
 
    echo "<script>
    alert('메일이 발송되었습니다. 메일을 확인하세요.');
-   window.location.href='index.html';
+   window.location.href='login.html';
    </script>";
 
 
