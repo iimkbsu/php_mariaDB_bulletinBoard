@@ -25,7 +25,7 @@ $conn = mysqli_connect($dbhost, $dbid, $dbpw, $dbname);
 
 
 //게시판 테이블 출력
-$sql = "SELECT * FROM notice ORDER BY idx DESC";
+$sql = "SELECT * FROM notice WHERE writer='{$_SESSION['id']}' ORDER BY idx DESC";
 $result = mysqli_query($conn, $sql);
 
 $list = null;
@@ -77,7 +77,7 @@ function loged1()
 function loged2()
 {
    if (loged() == true) {
-      echo "<a href='myNotice.php'>내가 쓴 글 보기</a>";
+      echo "<a href='index.html'>전체 글 보기</a>";
    }
 }
 

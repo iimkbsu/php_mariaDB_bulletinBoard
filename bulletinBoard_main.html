@@ -1,8 +1,30 @@
 <?php
-session_cache_limiter('');	
+session_cache_limiter('');
 session_start();
 
+
+
 $conn = mysqli_connect('127.0.0.1', 'root', '620328', 'bulletin');
+
+
+//조회수
+$sql = "SELECT writer FROM notice WHERE idx={$_GET['idx']}";
+$result = mysqli_query($conn, $sql);
+$arr = mysqli_fetch_array($result);
+$writer = $arr['writer'];
+
+$recBTN ='';
+
+if (isset($_SESSION['id']) && $writer != $_SESSION['id']) {
+   $sql = "UPDATE notice SET checked = checked + 1 WHERE idx={$_GET['idx']}";
+   $result = mysqli_query($conn, $sql);
+
+   $recBTN = "<a href=''>추천하기</a>";
+}
+
+
+
+//notice 내용 표기
 $sql = "SELECT * FROM notice WHERE idx={$_GET['idx']}";
 $result = mysqli_query($conn, $sql);
 
@@ -30,41 +52,64 @@ $rec = $arr['rec'];
 
 
 
+
+
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 
 <head>
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>글 title</title>
+   <title>게시판 >
+      <?= "{$title}"; ?>
+   </title>
 </head>
 
 <body>
+   <h1><a href="index.html">게시판</a></h1>
    <div>
+      글 번호 :
       <?= $idx ?>
    </div>
    <div>
+      글 종류 :
       <?= $head ?>
    </div>
    <div>
+      글 제목 :
       <?= $title ?>
    </div>
    <div>
+      글 내용 :
       <?= $description ?>
    </div>
    <div>
+      작성자 :
       <?= $writer ?>
    </div>
    <div>
+      작성일 :
       <?= $created ?>
    </div>
    <div>
+      조회 수 :
       <?= $checked ?>
    </div>
    <div>
+      추천 수 :
       <?= $rec ?>
+   </div>
+   <!-- 좋아요(글 추천)
+요구사항
+1. 로그인 해야 사용가능
+2. 한 게시물에 한 번만 허용 (좋아요 기억)
+3. 미체크시 좋아요체크가능 체크시 좋아요취소
+4. 좋아요 영구반영 
+5. 좋아요한 계정의 이름 표시 -->
+   <div>
+      <?=$recBTN?>
    </div>
 </body>
 

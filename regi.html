@@ -8,138 +8,231 @@
 
    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+   <link rel="stylesheet" href="style.css">
+
 
 </head>
 
 <body>
-   <div>
-      <form action="regiProcess.php" method="post" autocomplete="off">
-         <fieldset>
-            <legend>회원가입</legend>
+   <div id="x_btn_1"><a id="x_btn" href="index.html">X</a></div>
+   <div class="container" id="container">
+      <div class="form-container sign-up">
+         <form action="regiProcess.php" method="post" autocomplete="off">
+            <h1>회원가입</h1>
+            <span>사용하는 이메일주소로 가입하세요.</span>
 
-            <p>
-               <input type="text" placeholder="아이디" id="userID" required>
-               <input type="button" id="check_btn" value="중복체크" onclick="checkID()">
-            </p>
-
-            <p><input type="hidden" name="decide_id" id="decide_id">
-            <p><span id="decide" style="color:red">ID 중복체크를 꼭 해주세요.</span></p>
-
-            <p>
-               <input type="password" id="password" placeholder="비밀번호" name="pw" required>
-               <span><input type="button" onmouseover="showPW()" onmouseout="hidePW()" value="비밀번호 보기"></span>
-            </p>
-            <p><input type="text" placeholder="이름 (본명을 입력해주세요)" name="name" required></p>
+            <!-- <input type="text" placeholder="Name">
+            <input type="email" placeholder="Emai">
+            <input type="password" placeholder="password">
+            <button>회원가입하기</button> -->
 
 
-            <p>
-               <input type="text" id="email" placeholder="이메일 (비밀번호 찾기용)" name="email" required>
-               <span><input type="button" id="sendEmail" value="이메일 보내기"></span>
-            </p>
-            <p><input type="number" id="randomNumberInput" placeholder="6자리 번호" required hidden></p>
+            <div>
+            <input type="text" placeholder="아이디" id="userID" required>
+            <input type="button" id="check_btn" value="ID 중복체크" onclick="checkID()">
+            </div>
 
-            <p><textarea placeholder="프로필" name="profile"></textarea></p>
 
-            <p><input type="submit" id="regi_btn" value="회원가입" disabled="true"></p>
-         </fieldset>
-      </form>
+
+            <input type="hidden" name="decide_id" id="decide_id">
+            <span id="decide" style="color:red">ID 중복체크를 꼭 해주세요.</span>
+
+
+            <div>
+            <input type="password" id="password" placeholder="비밀번호" name="pw" required>
+            <img id="image" src="img/free-icon-private-876769.png" onmouseover="showPW()" onmouseout="hidePW()">
+            </div>
+
+            <input type="text" placeholder="이름 (본명을 입력해주세요)" name="name" required>
+
+            <div>
+            <input type="text" id="email" placeholder="이메일 (비밀번호 찾기용)" name="email" required>
+            <input type="button" id="sendEmail" value="이메일 보내기">
+            </div>
+
+            <input type="number" id="randomNumberInput" placeholder="6자리 번호" required hidden>
+
+            <input type="text" placeholder="프로필" name="profile">
+
+            <input type="submit" id="regi_btn" value="회원가입" disabled="true">
+         </form>
+      </div>
+
+      <div class="form-container sign-in">
+         <form>
+            <h1>로그인</h1>
+            <span>아이디와 비밀번호로 로그인하세요.</span>
+            <input type="email" placeholder="Emai">
+            <input type="password" placeholder="password">
+            <a href="#">비밀번호를 잊어버리셨나요?</a>
+            <button>로그인하기</button>
+         </form>
+      </div>
+      <div class="toggle-container">
+         <div class="toggle">
+            <div class="toggle-panel toggle-left">
+               <h1>이미 회원이신가요?</h1>
+               <p>아이디와 비밀번호로 로그인 해주세요.</p>
+               <button class="hidden" id="login">로그인하러 가기</button>
+            </div>
+
+            <div class="toggle-panel toggle-right">
+               <h1>안녕하세요 비회원님!</h1>
+               <p>회원가입을 하시면 <br>더 많은 기능을 사용할 수 있습니다.</p>
+               <button class="hidden" id="register">회원가입하러 가기</button>
+            </div>
+         </div>
+      </div>
    </div>
-   <div>
-      <p><a href="login.html">로그인하러 가기</a></p>
-   </div>
-   <div><a href="index.html">X</a></div>
-
-
-   <script>
-      function checkID() {
-
-         var id = document.getElementById("userID").value;
-         if (id == '') {
-            alert("아이디를 입력해주세요");
-         } else {
-            window.open("checkid.php?id=" + document.getElementById("userID").value, "chkid", 'status=no, height=300, width=500');
-
-         }
-      }
-
-      let regi_btn_disabled_key1 = 1;
-
-      //checkid.php의 opener.parent.decide()로 실행
-      function decide() {
-         document.getElementById("decide").innerHTML = "<span style='color:blue;'>사용 가능한 ID 입니다.</span>";
-         document.getElementById("decide_id").value = document.getElementById("userID").value;
-         document.getElementById("userID").disabled = true;
-         //document.getElementById("regi_btn").disabled = false;
-         regi_btn_disabled_key1 = 0;
-         document.getElementById("check_btn").value = "다른 ID로 변경";
-         document.getElementById("check_btn").setAttribute("onclick", "change()");
-      }
-
-      //checkid.php의 opener.parent.change()로 실행
-      function change() {
-         document.getElementById("decide").innerHTML = "<span style='color:red;'>ID 중복 여부를 확인해주세요.</span>";
-         document.getElementById("userID").disabled = false;
-         document.getElementById("userID").value = '';
-         //document.getElementById("regi_btn").disabled = true;
-         regi_btn_disabled_key1 = 1;
-         document.getElementById("check_btn").value = "ID 중복 검사";
-         document.getElementById("check_btn").setAttribute("onclick", "checkID()");
-      }
-
-      function showPW() {
-         document.getElementById("password").type = "text";
-      }
-      function hidePW() {
-         document.getElementById("password").type = "password";
-      }
 
 
 
-      let randomNumber;
 
-      $(document).ready(function () {
-         $("#sendEmail").click(function () {
+   <!-- <body>
+      <div>
+         <form action="regiProcess.php" method="post" autocomplete="off">
+            <fieldset>
+               <legend>회원가입</legend>
 
-            if ($("#email").val() == '') {
-               alert("이메일을 입력하세요.");
+               <p>
+                  <input type="text" placeholder="아이디" id="userID" required>
+                  <input type="button" id="check_btn" value="중복체크" onclick="checkID()">
+               </p>
+
+               <p><input type="hidden" name="decide_id" id="decide_id">
+               <p><span id="decide" style="color:red">ID 중복체크를 꼭 해주세요.</span></p>
+
+               <p>
+                  <input type="password" id="password" placeholder="비밀번호" name="pw" required>
+                  <span><input type="button" onmouseover="showPW()" onmouseout="hidePW()" value="비밀번호 보기"></span>
+               </p>
+               <p><input type="text" placeholder="이름 (본명을 입력해주세요)" name="name" required></p>
+
+
+               <p>
+                  <input type="text" id="email" placeholder="이메일 (비밀번호 찾기용)" name="email" required>
+                  <span><input type="button" id="sendEmail" value="이메일 보내기"></span>
+               </p>
+               <p><input type="number" id="randomNumberInput" placeholder="6자리 번호" required hidden></p>
+
+               <p><textarea placeholder="프로필" name="profile"></textarea></p>
+
+               <p><input type="submit" id="regi_btn" value="회원가입" disabled="true"></p>
+            </fieldset>
+         </form>
+      </div> -->
+      <div>
+         <p><a href="login.html">로그인하러 가기</a></p>
+      </div>
+      <div><a href="index.html">X</a></div>
+
+
+      <script>
+         function checkID() {
+
+            var id = document.getElementById("userID").value;
+            if (id == '') {
+               alert("아이디를 입력해주세요");
             } else {
-               randomNumber = Number(Math.floor(100000 + Math.random() * 900000));
+               window.open("checkid.php?id=" + document.getElementById("userID").value, "chkid", 'status=no, height=300, width=500');
 
-               var email = $("#email").val();
-               $("#randomNumberInput").prop('hidden', false);
-
-               $.ajax({
-                  url: 'checkEmail.php',
-                  type: 'POST',
-                  data: { email: email, randomNumber: randomNumber },
-                  success: function (response) {
-                     alert(response);
-                  },
-                  error: function (xhr, status, error) {
-                     console.error(xhr.responseText);
-                  }
-               });
             }
-         })
-      })
-
-
-
-      $("#randomNumberInput").keyup(function () {
-         var randomKey = Number($("#randomNumberInput").val());
-
-
-         if (randomKey === randomNumber && regi_btn_disabled_key1 == 0) {
-            document.getElementById("regi_btn").disabled = false;
-         } else {
-            $("#regi_btn").prop('disabled', true);
          }
 
-      });
+         let regi_btn_disabled_key1 = 1;
+
+         //checkid.php의 opener.parent.decide()로 실행
+         function decide() {
+            document.getElementById("decide").innerHTML = "<span style='color:blue;'>사용 가능한 ID 입니다.</span>";
+            document.getElementById("decide_id").value = document.getElementById("userID").value;
+            document.getElementById("userID").disabled = true;
+            //document.getElementById("regi_btn").disabled = false;
+            regi_btn_disabled_key1 = 0;
+            document.getElementById("check_btn").value = "다른 ID로 변경";
+            document.getElementById("check_btn").setAttribute("onclick", "change()");
+         }
+
+         //checkid.php의 opener.parent.change()로 실행
+         function change() {
+            document.getElementById("decide").innerHTML = "<span style='color:red;'>ID 중복 여부를 확인해주세요.</span>";
+            document.getElementById("userID").disabled = false;
+            document.getElementById("userID").value = '';
+            //document.getElementById("regi_btn").disabled = true;
+            regi_btn_disabled_key1 = 1;
+            document.getElementById("check_btn").value = "ID 중복 검사";
+            document.getElementById("check_btn").setAttribute("onclick", "checkID()");
+         }
+
+         function showPW() {
+            document.getElementById("password").type = "text";
+            document.getElementById("image").src="img/free-icon-eye-158746.png";
+         }
+         function hidePW() {
+            document.getElementById("password").type = "password";
+            document.getElementById("image").src="img/free-icon-private-876769.png";
+         }
 
 
-   </script>
 
-</body>
+         let randomNumber;
+
+         $(document).ready(function () {
+            $("#sendEmail").click(function () {
+
+               if ($("#email").val() == '') {
+                  alert("이메일을 입력하세요.");
+               } else {
+                  randomNumber = Number(Math.floor(100000 + Math.random() * 900000));
+
+                  var email = $("#email").val();
+                  $("#randomNumberInput").prop('hidden', false);
+
+                  $.ajax({
+                     url: 'checkEmail.php',
+                     type: 'POST',
+                     data: { email: email, randomNumber: randomNumber },
+                     success: function (response) {
+                        alert(response);
+                     },
+                     error: function (xhr, status, error) {
+                        console.error(xhr.responseText);
+                     }
+                  });
+               }
+            })
+         })
+
+
+
+         $("#randomNumberInput").keyup(function () {
+            var randomKey = Number($("#randomNumberInput").val());
+
+
+            if (randomKey === randomNumber && regi_btn_disabled_key1 == 0) {
+               document.getElementById("regi_btn").disabled = false;
+            } else {
+               $("#regi_btn").prop('disabled', true);
+            }
+
+         });
+
+
+         const container = document.getElementById('container');
+         const registerBtn = document.getElementById('register');
+         const loginBtn = document.getElementById('login');
+
+         registerBtn.addEventListener('click', () => {
+            container.classList.add("active");
+         });
+
+         loginBtn.addEventListener('click', () => {
+            container.classList.remove("active");
+         })
+
+
+      </script>
+
+   </body>
 
 </html>
