@@ -17,8 +17,6 @@ body {
    height: 100vh;
 }
 
-#x_btn_1 {
-}
 
 #x_btn {
    font-size: 40px;
@@ -132,12 +130,17 @@ body {
    width: 80%;
 }
 
+
+
 #image {
    margin: 0;
    padding: 0;
    width: 20px;
    height: 20px;
 }
+
+
+
 
 #check_btn, #sendEmail{
    background-color: #854dff;
@@ -233,3 +236,4 @@ body {
 .container.active .toggle-right{
    transform: translateX(200%);
 }
+

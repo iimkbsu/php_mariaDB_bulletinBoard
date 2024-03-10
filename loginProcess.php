@@ -53,13 +53,13 @@ if ($getID['id']) {
       return 0;
    } else {
       echo "<script>alert('비밀번호가 틀립니다.');
-      window.location.href='login.html';
+      window.location.href='regi.html';
       </script>";
       return 1;
    }
 } else {
    echo "<script>alert('등록되지 않은 아이디입니다.');
-   window.location.href='login.html';
+   window.location.href='regi.html';
    </script>";
    return 1;
 }

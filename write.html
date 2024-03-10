@@ -1,24 +1,38 @@
+<?php
+session_cache_limiter();
+session_start();
+?>
+
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <title>글 작성</title>
 </head>
+
 <body>
    <form id="writeForm" action="writeProcess.php" method="post">
       <fieldset>
          <legend>글 작성</legend>
          <p><select name="head" form="writeForm">
-            <option value="notice">공지</option>
-            <option value="normal">일반</option>
-            <option value="question">질문</option>
-            <option value="vote">투표</option>
-         </select>
-         <input type="text" name="title" placeholder="제목" required></p>
+            <?php
+            if(($_SESSION['id'] == 'admin' || $_SESSION['id'] == 'ADMIN')) {
+               echo "<option value=\"notice\">공지</option>";
+            }
+            ?>
+               
+               <option value="normal">일반</option>
+               <option value="question">질문</option>
+               <option value="vote">투표</option>
+            </select>
+            <input type="text" name="title" placeholder="제목" required>
+         </p>
          <p><textarea name="description" required placeholder="본문" rows="10px" cols="30px"></textarea></p>
          <p><input type="submit" value="글 작성"></p>
       </fieldset>
    </form>
 </body>
+
 </html>

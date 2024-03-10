@@ -13,13 +13,48 @@ $result = mysqli_query($conn, $sql);
 $arr = mysqli_fetch_array($result);
 $writer = $arr['writer'];
 
-$recBTN ='';
+$recBTN = '';
 
-if (isset($_SESSION['id']) && $writer != $_SESSION['id']) {
-   $sql = "UPDATE notice SET checked = checked + 1 WHERE idx={$_GET['idx']}";
-   $result = mysqli_query($conn, $sql);
+$update = '';
+$delete = '';
 
-   $recBTN = "<a href=''>추천하기</a>";
+if (isset($_SESSION['id'])) {
+
+   //내 글일 때
+   if ($writer == $_SESSION['id']) {
+      //본인 글만 수정 및 삭제
+      $update = "<a>글 수정하기</a>";
+      $delete = "<a>글 삭제하기</a>";
+      //내 글이 아닐 때만 조회수 증가 및 추천
+   } else if ($writer != $_SESSION['id']) {
+
+      //view 파라미터 사용하여, 추천한 후 글로 돌아올 때 조회수 증가 방지 
+      if (!isset($_GET['view'])) {
+         $sql = "UPDATE notice SET checked = checked + 1 WHERE idx={$_GET['idx']}";
+         $result = mysqli_query($conn, $sql);
+      }
+
+      //추천 여부 확인
+      $id = $_SESSION['id'];
+      $noticeIDX = $_GET['idx'];
+      $sql = "SELECT * FROM liked WHERE notice_idx = '{$noticeIDX}' AND like_id ='{$id}'";
+      $result = mysqli_query($conn, $sql);
+      $arr = mysqli_fetch_array($result);
+
+      //is_null()로 liked 테이블에 추천 데이터가 생성되어있지 않을 때에도 작동하게
+      if (!is_null($arr)) {
+         if ($arr['like_rec'] == 1) {
+            $recBTN = "<a href='like.php?idx={$_GET['idx']}'>추천 취소하기</a>";
+         } else {
+            $recBTN = "<a href='like.php?idx={$_GET['idx']}'>추천하기</a>";
+         }
+      } else {
+         $recBTN = "<a href='like.php?idx={$_GET['idx']}'>추천하기</a>";
+      }
+   }
+
+
+
 }
 
 
@@ -48,7 +83,14 @@ $description = $arr['description'];
 $writer = $arr['writer'];
 $created = $arr['created'];
 $checked = $arr['checked'];
-$rec = $arr['rec'];
+
+$sql = "SELECT COUNT(*) AS CNT FROM liked WHERE notice_idx='{$_GET['idx']}' AND like_rec='1'";
+$result = mysqli_query($conn, $sql);
+$arr = mysqli_fetch_array($result);
+$rec = $arr['CNT'];
+
+$sql = "UPDATE notice SET rec='{$rec}' WHERE idx='{$_GET['idx']}'";
+$result = mysqli_query($conn, $sql);
 
 
 
@@ -69,6 +111,9 @@ $rec = $arr['rec'];
 
 <body>
    <h1><a href="index.html">게시판</a></h1>
+   <div>
+      <?= $_SESSION['id'] ?>로 접속중....
+   </div>
    <div>
       글 번호 :
       <?= $idx ?>
@@ -109,8 +154,15 @@ $rec = $arr['rec'];
 4. 좋아요 영구반영 
 5. 좋아요한 계정의 이름 표시 -->
    <div>
-      <?=$recBTN?>
+      <?= $delete ?>
    </div>
+   <div>
+      <?= $update ?>
+   </div>
+   <div>
+      <?= $recBTN ?>
+   </div>
+
 </body>
 
 </html>
