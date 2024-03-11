@@ -45,6 +45,7 @@ if ($getID['id']) {
       $_SESSION['token'] = $token;
       $getSessionToken = $_SESSION['token'];
       $_SESSION['id'] = $id;
+      $_SESSION['pw'] = $pw;
 
       echo "<script>alert('로그인 완료');
       window.location.href='index.html';

@@ -24,6 +24,7 @@ $conn = mysqli_connect($dbhost, $dbid, $dbpw, $dbname);
 // }
 
 
+
 //게시판 테이블 출력
 $sql = "SELECT * FROM notice ORDER BY idx DESC";
 $result = mysqli_query($conn, $sql);
