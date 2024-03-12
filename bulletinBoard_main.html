@@ -114,10 +114,13 @@ $result = mysqli_query($conn, $sql);
 <body>
    <h1><a href="index.html">게시판</a></h1>
    <div>
-      <?= $_SESSION['id'] ?>로 접속중....
-   </div>
-   <div>
-      글 번호 :
+      <?php if (isset($_SESSION['id'])) {
+         echo $_SESSION['id'];
+      }?>
+         로 접속중....
+      </div>
+      <div>
+         글 번호 :
       <?= $idx ?>
    </div>
    <div>
@@ -169,50 +172,51 @@ $result = mysqli_query($conn, $sql);
    <div>
       <h3>댓글</h3>
       <?php
-         $sql = "SELECT * FROM reply WHERE notice_idx='{$_GET['idx']}' ORDER BY idx ASC";
-         $result = mysqli_query($conn, $sql);
-         while($arr = mysqli_fetch_array($result)) {
-            
-            // echo $arr['idx'].$arr['notice_idx'].$arr['id'].$arr['pw'].$arr['content'].$arr['date']."<br>";
-      ?>
-      <div>
-         <div style="font-weight:700"><?=$arr['id']?></div>
-         <div><?=$arr['content']?></div>
-         <div style="font-size:12px"><?=$arr['date']?></div>
-         <?php 
-            if($_SESSION['id'] == $arr['id'] && $_SESSION['pw'] == $arr['pw']) {
-               echo "<button>수정</button> <button>삭제</button>";
-            }else {
-               echo "<button>수정</button> <button>삭제</button>";
-            }
-            
+      $sql = "SELECT * FROM reply WHERE notice_idx='{$_GET['idx']}' ORDER BY idx ASC";
+      $result = mysqli_query($conn, $sql);
+      while ($arr = mysqli_fetch_array($result)) {
+
+         // echo $arr['idx'].$arr['notice_idx'].$arr['id'].$arr['pw'].$arr['content'].$arr['date']."<br>";
          ?>
-      </div><hr>
-      
-      <?php
+         <div>
+            <div style="font-weight:700">
+               <?= $arr['id'] ?>
+            </div>
+            <div>
+               <?= $arr['content'] ?>
+            </div>
+            <div style="font-size:12px">
+               <?= $arr['date'] ?>
+            </div>
+               <a href="replyDelete.html?idx=<?=$idx?>&ridx=<?=$arr['idx']?>">삭제</a>
+         </div>
+         <hr>
+
+         <?php
 
       }
 
-      if(isset($_SESSION['id']) && isset($_SESSION['pw'])) {
+      if (isset($_SESSION['id']) && isset($_SESSION['pw'])) {
          $id = $_SESSION['id'];
          $pw = $_SESSION['pw'];
-      }else {
-         $id ='';
-         $pw ='';
+      } else {
+         $id = '';
+         $pw = '';
       }
 
       ?>
-      <form action="reply.php?idx=<?=$_GET['idx']?>" method="post">
-         <p><input type="text" name="id" id="replyID" placeholder="닉네임" value="<?=$id?>" required disabled> <input type="password" name="pw" id="replyPW" placeholder="비밀번호" value="<?=$pw?>" required disabled></p>
+      <form action="reply.php?idx=<?= $_GET['idx'] ?>" method="post">
+         <p><input type="text" name="id" id="replyID" placeholder="닉네임" value="<?= $id ?>" required disabled> <input
+               type="password" name="pw" id="replyPW" placeholder="비밀번호" value="<?= $pw ?>" required disabled></p>
          <textarea name="reply" placeholder="댓글"></textarea> <input type="submit" value="댓글쓰기">
       </form>
    </div>
 
    <script>
       function checkDel() {
-         var ans =confirm('삭제하시겠습니까?');
-         if(ans) {
-            var ref = 'delete.php?idx=<?=$_GET['idx']?>';
+         var ans = confirm('삭제하시겠습니까?');
+         if (ans) {
+            var ref = 'delete.php?idx=<?= $_GET['idx'] ?>';
             location = ref;
          }
       }
@@ -220,7 +224,7 @@ $result = mysqli_query($conn, $sql);
       let a = document.getElementById('replyID');
       let b = document.getElementById('replyPW');
 
-      if(a.value == '' && b.value == '') {
+      if (a.value == '' && b.value == '') {
          a.disabled = false;
          b.disabled = false;
       }
