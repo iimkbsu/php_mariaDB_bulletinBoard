@@ -192,9 +192,12 @@
          $("#sendEmail").click(function () {
 
             if ($("#email").val() == '') {
+               
                alert("이메일을 입력하세요.");
+               
             } else {
                randomNumber = Number(Math.floor(100000 + Math.random() * 900000));
+
 
                var email = $("#email").val();
                $("#randomNumberInput").prop('hidden', false);
@@ -215,19 +218,35 @@
       })
 
 
+      //모바일에서도 복붙하면 바로 회원가입 버튼 작동되기 수정
+      $("#randomNumberInput").on('keyup input', function() {
 
-      $("#randomNumberInput").keyup(function () {
          var randomKey = Number($("#randomNumberInput").val());
-
 
          if (randomKey === randomNumber && regi_btn_disabled_key1 == 0) {
             document.getElementById("regi_btn").disabled = false;
             document.getElementById("regi_btn").style="background-color:#512da8; color:#fff";
          } else {
             $("#regi_btn").prop('disabled', true);
+            $("#regi_btn").css("background-color", "#eeeeee");
          }
 
       });
+
+      //컴퓨터에서 복붙 사용해도 입력이 되지만 모바일에서는 안 됨. 항상 한 번 숫자를 지웠다가 다시 넣어줘야 작동.
+      // $("#randomNumberInput").keyup(function () {
+
+      //    var randomKey = Number($("#randomNumberInput").val());
+
+      //    if (randomKey === randomNumber && regi_btn_disabled_key1 == 0) {
+      //       document.getElementById("regi_btn").disabled = false;
+      //       document.getElementById("regi_btn").style="background-color:#512da8; color:#fff";
+      //    } else {
+      //       $("#regi_btn").prop('disabled', true);
+      //       $("#regi_btn").css("background-color", "#eeeeee");
+      //    }
+
+      // });
 
 
       const container = document.getElementById('container');

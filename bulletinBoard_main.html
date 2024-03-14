@@ -53,8 +53,11 @@ if (isset($_SESSION['id'])) {
       }
    }
 
-
-
+} else {
+   if (!isset($_GET['view'])) {
+      $sql = "UPDATE notice SET checked = checked + 1 WHERE idx={$_GET['idx']}";
+      $result = mysqli_query($conn, $sql);
+   }
 }
 
 
@@ -114,26 +117,21 @@ $result = mysqli_query($conn, $sql);
 <body>
    <h1><a href="index.html">게시판</a></h1>
    <div>
-      <?php if (isset($_SESSION['id'])) {
-         echo $_SESSION['id'];
-      }?>
-         로 접속중....
-      </div>
-      <div>
-         글 번호 :
+      <?php
+      if (isset($_SESSION['id'])) {
+         echo $_SESSION['id'] . "로 접속중...";
+      } else {
+         echo "<h3><a href=\"regi.html\">로그인 및 회원가입</a></h3>";
+      }
+      ?>
+   </div>
+   <div>
+      글 번호 :
       <?= $idx ?>
    </div>
    <div>
       글 종류 :
       <?= $head ?>
-   </div>
-   <div>
-      글 제목 :
-      <?= $title ?>
-   </div>
-   <div>
-      글 내용 :
-      <?= $description ?>
    </div>
    <div>
       작성자 :
@@ -151,6 +149,19 @@ $result = mysqli_query($conn, $sql);
       추천 수 :
       <?= $rec ?>
    </div>
+   <div>
+      글 제목 :
+      <?= $title ?>
+   </div>
+   <hr>
+   <div>
+      글 내용 :<br>
+      <?= nl2br($description); ?>
+   </div>
+   <br>
+   <hr>
+
+   <br>
    <!-- 좋아요(글 추천)
 요구사항
 1. 로그인 해야 사용가능
@@ -183,12 +194,12 @@ $result = mysqli_query($conn, $sql);
                <?= $arr['id'] ?>
             </div>
             <div>
-               <?= $arr['content'] ?>
+               <?= nl2br($arr['content']); ?>
             </div>
             <div style="font-size:12px">
                <?= $arr['date'] ?>
             </div>
-               <a href="replyDelete.html?idx=<?=$idx?>&ridx=<?=$arr['idx']?>">삭제</a>
+            <a href="replyDelete.html?idx=<?= $idx ?>&ridx=<?= $arr['idx'] ?>">삭제</a>
          </div>
          <hr>
 
