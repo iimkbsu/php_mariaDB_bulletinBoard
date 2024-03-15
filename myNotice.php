@@ -45,8 +45,8 @@ while ($noticeBoard = mysqli_fetch_array($result)) {
    $list .= "<tr>
       <td>{$noticeBoard['idx']}</td>
       <td>{$noticeBoard['head']}</td>
-      <td><a href='bulletinBoard_main.html?idx={$noticeBoard['idx']}'>".mb_substr($noticeBoard['title'],0,30)."</a></td>
-      <td>".mb_substr($noticeBoard['description'],0,50)."</td>
+      <td><a href='bulletinBoard_main.html?idx={$noticeBoard['idx']}'>" . mb_substr($noticeBoard['title'], 0, 30) . "</a></td>
+      <td>" . mb_substr($noticeBoard['description'], 0, 50) . "</td>
       <td>{$noticeBoard['writer']}</td>
       <td>{$noticeBoard['created']}</td>
       <td>{$noticeBoard['checked']}</td>
@@ -71,6 +71,8 @@ function loged1()
       <h3><a href=\"regi.html\">회원가입</a></h3>";
    } else {
       echo "<h3><a href=\"logout.php\">로그아웃</a></h3>";
+      echo "<div onclick='updateAccount()' style='cursor:pointer; width:120px;'>회원정보 수정</div>";
+      echo "<div onclick='deleteAccount()' style='cursor:pointer; width:80px;'>회원탈퇴</div>";
    }
 }
 
@@ -133,6 +135,17 @@ function loged2()
          <?= $list ?>
       </table>
    </div>
+
+   <script>
+      function deleteAccount() {
+         if (confirm("진짜로 탈퇴하시겠습니까?")) {
+            location.href = "deleteAccount.php";
+         }
+      }
+      function updateAccount() {
+         location.href = 'updateAccount.html';
+      }
+   </script>
 
 </body>
 

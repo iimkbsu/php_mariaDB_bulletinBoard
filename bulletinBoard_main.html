@@ -219,7 +219,7 @@ $result = mysqli_query($conn, $sql);
       <form action="reply.php?idx=<?= $_GET['idx'] ?>" method="post">
          <p><input type="text" name="id" id="replyID" placeholder="닉네임" value="<?= $id ?>" required disabled> <input
                type="password" name="pw" id="replyPW" placeholder="비밀번호" value="<?= $pw ?>" required disabled></p>
-         <textarea name="reply" placeholder="댓글"></textarea> <input type="submit" value="댓글쓰기">
+         <textarea name="reply" placeholder="댓글" rows="5px" cols="60px"></textarea> <input type="submit" value="댓글쓰기">
       </form>
    </div>
 
