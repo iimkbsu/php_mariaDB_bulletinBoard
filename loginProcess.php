@@ -21,14 +21,15 @@ $getID = "SELECT id FROM user WHERE id='$id'";
 $getID = mysqli_query($conn, $getID);
 $getID = mysqli_fetch_array($getID);
 $getSessionToken = null;
+$token = null;
 
 //id가 있다면
 if ($getID['id']) {
    //id에서 비밀번호 가져오기
-   $getPW = "SELECT pw FROM user WHERE id='$id'";
-   $getPW = mysqli_query($conn, $getPW);
-   $getPW = mysqli_fetch_array($getPW);
-   $PassWord = $getPW['pw'];
+   $getArr = "SELECT * FROM user WHERE id='$id'";
+   $getArr = mysqli_query($conn, $getArr);
+   $getArr = mysqli_fetch_array($getArr);
+   $PassWord = $getArr['pw'];
 
    //DB에서 가져온 pw와 입력된 pw가 같다면
    if ($PassWord == $pw) {
@@ -46,6 +47,9 @@ if ($getID['id']) {
       $getSessionToken = $_SESSION['token'];
       $_SESSION['id'] = $id;
       $_SESSION['pw'] = $pw;
+      $_SESSION['email'] = $getArr['email'];
+      $_SESSION['name'] = $getArr['name'];
+      $_SESSION['profile'] = $getArr['profile'];
 
       echo "<script>alert('로그인 완료');
       window.location.href='index.html';

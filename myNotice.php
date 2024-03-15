@@ -45,8 +45,8 @@ while ($noticeBoard = mysqli_fetch_array($result)) {
    $list .= "<tr>
       <td>{$noticeBoard['idx']}</td>
       <td>{$noticeBoard['head']}</td>
-      <td><a href='bulletinBoard_main.html?idx={$noticeBoard['idx']}'>{$noticeBoard['title']}</a></td>
-      <td>{$noticeBoard['description']}</td>
+      <td><a href='bulletinBoard_main.html?idx={$noticeBoard['idx']}'>".mb_substr($noticeBoard['title'],0,30)."</a></td>
+      <td>".mb_substr($noticeBoard['description'],0,50)."</td>
       <td>{$noticeBoard['writer']}</td>
       <td>{$noticeBoard['created']}</td>
       <td>{$noticeBoard['checked']}</td>

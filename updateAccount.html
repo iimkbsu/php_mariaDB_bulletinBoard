@@ -1,18 +1,64 @@
+<?php
+session_cache_limiter();
+session_start();
+
+$id = $_SESSION['id'];
+$pw = $_SESSION['pw'];
+$name = $_SESSION['name'];
+$email = $_SESSION['email'];
+$profile = $_SESSION['profile'];
+
+?>
+
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <title>회원정보 수정</title>
 </head>
+
 <body>
-   <form>
+   <h3><a href="index.html">X</a></h3>
+   <form id="updateAccountForm">
       <fieldset>
-         <input type="text">
-         <input type="text">
-         <input type="text">
-         <input type="text">
+         <p>아이디 : <input id="idid" type="text" name="id" value="<?=$id?>" required disabled></p>
+         <p>비밀번호 : <input type="password" id="pw" name="pw" value="<?=$pw?>"  required>
+         <img id="image" src="img/free-icon-private-876769.png" style="width:20px; height:20px" onmouseover="showPW()" onmouseout="hidePW()"></p>
+         <p>이름 : <input type="text" name="name" value="<?=$name?>" required></p>
+         <p>이메일 : <input id="email" type="text" name="email" value="<?=$email?>" required disabled></p>
+         <p>프로필 : <input type="text" name="profile" value="<?=$profile?>"></p>
+         <button onclick="updateAccount()">회원정보 수정</button>
       </fieldset>
    </form>
+
+   <script>
+   function updateAccount() {
+      if(confirm("정말로 수정하시겠습니까?")) {
+         document.getElementById('idid').disabled = false;
+         document.getElementById('email').disabled = false;
+         let acc = document.getElementById('updateAccountForm');
+         acc.setAttribute("method", "post");
+         acc.setAttribute("action", "updateAccountProcess.php");
+      }
+      
+   }
+
+   function showPW() {
+
+         document.getElementById("pw").type = "text";
+         document.getElementById("image").src = "img/free-icon-eye-158746.png";
+
+      }
+      function hidePW() {
+
+         document.getElementById("pw").type = "password";
+         document.getElementById("image").src = "img/free-icon-private-876769.png";
+
+      }
+
+   </script>
 </body>
+
 </html>
