@@ -29,6 +29,7 @@ $conn = mysqli_connect($dbhost, $dbid, $dbpw, $dbname);
 $sql = "SELECT * FROM notice ORDER BY idx DESC";
 $result = mysqli_query($conn, $sql);
 
+
 $list = null;
 
 while ($noticeBoard = mysqli_fetch_array($result)) {
@@ -43,10 +44,18 @@ while ($noticeBoard = mysqli_fetch_array($result)) {
    } else {
       $noticeBoard['head'] = '테스트';
    }
+
+   //댓글 숫자 카운팅 bulletinBoard_main.html의 댓글작성으로 옮김
+   // $sqlrp = "SELECT count(notice_idx) AS repcnt FROM reply WHERE notice_idx={$noticeBoard['idx']};";
+   // $resultrp = mysqli_query($conn, $sqlrp);
+   // $arrrp = mysqli_fetch_array($resultrp);
+   // $sqladd = "UPDATE notice SET rep={$arrrp['repcnt']} WHERE idx={$noticeBoard['idx']};";
+   // $resultrp = mysqli_query($conn, $sqladd);
+
    $list .= "<tr>
       <td>{$noticeBoard['idx']}</td>
       <td>{$noticeBoard['head']}</td>
-      <td id='line_limit'><a href='bulletinBoard_main.html?idx={$noticeBoard['idx']}'>".mb_substr($noticeBoard['title'],0,20)."</a></td>
+      <td id='line_limit'><a href='bulletinBoard_main.html?idx={$noticeBoard['idx']}'>".mb_substr($noticeBoard['title'],0,20)."</a> [".$noticeBoard['rep']."]</td>
       <td id='line_limit'>".mb_substr($noticeBoard['description'], 0, 30)."</td>
       <td>{$noticeBoard['writer']}</td>
       <td>{$noticeBoard['created']}</td>

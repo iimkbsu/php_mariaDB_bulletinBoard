@@ -60,6 +60,13 @@ if (isset($_SESSION['id'])) {
    }
 }
 
+//댓글 작성시 db에 repcnt 실행하여 notice rep에 적용
+$sqlrp = "SELECT count(notice_idx) AS repcnt FROM reply WHERE notice_idx={$_GET['idx']};";
+$resultrp = mysqli_query($conn, $sqlrp);
+$arrrp = mysqli_fetch_array($resultrp);
+$sqladd = "UPDATE notice SET rep={$arrrp['repcnt']} WHERE idx={$_GET['idx']};";
+$resultrp = mysqli_query($conn, $sqladd);
+
 
 
 //notice 내용 표기
@@ -86,6 +93,7 @@ $description = $arr['description'];
 $writer = $arr['writer'];
 $created = $arr['created'];
 $checked = $arr['checked'];
+$rep = $arr['rep'];
 
 $sql = "SELECT COUNT(*) AS CNT FROM liked WHERE notice_idx='{$_GET['idx']}' AND like_rec='1'";
 $result = mysqli_query($conn, $sql);
@@ -181,7 +189,7 @@ $result = mysqli_query($conn, $sql);
 
 
    <div>
-      <h3>댓글</h3>
+      <h3>댓글 [<?=$rep?>]</h3>
       <?php
       $sql = "SELECT * FROM reply WHERE notice_idx='{$_GET['idx']}' ORDER BY idx ASC";
       $result = mysqli_query($conn, $sql);
