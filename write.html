@@ -20,10 +20,11 @@ if(!isset($_SESSION['id'])) {
    <!-- 비회원 글쓰기 방지 -->
    <?php
       if(isset($_SESSION['id'])) {
-         echo "<form id=\"writeForm\" action=\"writeProcess.php\" method=\"post\">";
+         echo "<form id=\"writeForm\" action=\"writeProcess.php\" method=\"post\" enctype=\"multipart/form-data\">";
       }
    ?>
    <!-- 비회원 글쓰기 방지 -->
+   <p><a href="index.html">X</a></p>
       <fieldset>
          <legend>글 작성</legend>
          <p><select name="head" form="writeForm">
@@ -41,6 +42,11 @@ if(!isset($_SESSION['id'])) {
             <input type="text" name="title" placeholder="제목" required>
          </p>
          <p><textarea name="description" required placeholder="본문" rows="20px" cols="70px"></textarea></p>
+         <!-- 파일 업로드 추가 -->
+         <!-- 최대 파일사이즈 설정 -->
+         <!-- <input type="hidden" value="30000" name="max_file_size"> -->
+         <input type='file' name="userfile[]" multiple>
+
          <p><input type="submit" value="글 작성"></p>
       </fieldset>
    </form>

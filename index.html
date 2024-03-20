@@ -9,6 +9,8 @@ $dbname = 'bulletin';
 $dbhost = '127.0.0.1';
 $conn = mysqli_connect($dbhost, $dbid, $dbpw, $dbname);
 
+
+
 // $id = $data['id'];
 // $pw = $data['pw'];
 
@@ -29,6 +31,22 @@ $conn = mysqli_connect($dbhost, $dbid, $dbpw, $dbname);
 $sql = "SELECT * FROM notice ORDER BY idx DESC";
 $result = mysqli_query($conn, $sql);
 
+
+//게시글 페이지수 구현
+$page;
+if (isset ($_GET['page'])) {
+   $page = $_GET['page'];
+} else {
+   $page = 1;
+}
+$total_notice = mysqli_num_rows($result);
+
+$per = 10; //한 페이지에 보여줄 게시글 수
+$start = ($page - 1) * $per + 1;
+$start -= 1;
+
+$sql = "SELECT * FROM notice ORDER BY idx DESC limit $start, $per";
+$result = mysqli_query($conn, $sql);
 
 $list = null;
 
@@ -52,11 +70,13 @@ while ($noticeBoard = mysqli_fetch_array($result)) {
    // $sqladd = "UPDATE notice SET rep={$arrrp['repcnt']} WHERE idx={$noticeBoard['idx']};";
    // $resultrp = mysqli_query($conn, $sqladd);
 
+
+
    $list .= "<tr>
       <td>{$noticeBoard['idx']}</td>
       <td>{$noticeBoard['head']}</td>
-      <td id='line_limit'><a href='bulletinBoard_main.html?idx={$noticeBoard['idx']}'>".mb_substr($noticeBoard['title'],0,20)."</a> [".$noticeBoard['rep']."]</td>
-      <td id='line_limit'>".mb_substr($noticeBoard['description'], 0, 30)."</td>
+      <td id='line_limit'><a href='bulletinBoard_main.html?idx={$noticeBoard['idx']}'>" . mb_substr($noticeBoard['title'], 0, 20) . "</a> [" . $noticeBoard['rep'] . "]</td>
+      <td id='line_limit'>" . mb_substr($noticeBoard['description'], 0, 30) . "</td>
       <td>{$noticeBoard['writer']}</td>
       <td>{$noticeBoard['created']}</td>
       <td>{$noticeBoard['checked']}</td>
@@ -65,9 +85,13 @@ while ($noticeBoard = mysqli_fetch_array($result)) {
 
 }
 
+
+
+
+
 function loged()
 {
-   if (isset($_SESSION['id'])) {
+   if (isset ($_SESSION['id'])) {
       return true;
    } else {
       return false;
@@ -119,9 +143,9 @@ function loged2()
       <p id="hello">
          <?php
 
-         if (isset($_SESSION['id'])) {
+         if (isset ($_SESSION['id'])) {
             echo "{$_SESSION['id']} 님 반갑습니다.";
-            
+
          } else {
             echo "비회원 고객님 반갑습니다.";
          }
@@ -148,14 +172,52 @@ function loged2()
       </table>
    </div>
 
+   <!-- 페이지 수 링크 출력-->
+   <div>
+
+
+
+
+      <?php
+
+      if ($page > 1) {
+         echo "<a style=\"color:black; text-decoration-line:none\" href=\"index.html?page=1\">[처음] </a>";
+      }
+      if ($page > 1) {
+         $pre = $page - 1;
+         echo "<a style=\"color:black; text-decoration-line:none\" href=\"index.html?page=$pre\"> < </a>";
+      }
+
+      $total_page = ceil($total_notice / $per);
+      $page_num = 1;
+
+      while ($page_num <= $total_page) {
+         if ($page == $page_num) {
+            echo "<b><a style=\"color:red;\" href=\"index.html?page=$page_num\">$page_num </a></b>";
+            ;
+         } else {
+            echo "<a style=\"color:black; text-decoration-line:none\" href=\"index.html?page=$page_num\">$page_num </a>";
+         }
+         $page_num++;
+      }
+      if ($page < $total_page) {
+         $next = $page + 1;
+         echo "<a style=\"color:black; text-decoration-line:none\" href=\"index.html?page=$next\"> > </a>";
+      }
+      if ($page < $total_page) {
+         echo "<a style=\"color:black; text-decoration-line:none\" href=\"index.html?page=$total_page\"> [끝]</a>";
+      }
+      ?>
+   </div>
+
    <script>
       function deleteAccount() {
-         if(confirm("진짜로 탈퇴하시겠습니까?")) {
-            location.href="deleteAccount.php";
+         if (confirm("진짜로 탈퇴하시겠습니까?")) {
+            location.href = "deleteAccount.php";
          }
       }
       function updateAccount() {
-         location.href='updateAccount.html';
+         location.href = 'updateAccount.html';
       }
    </script>
 

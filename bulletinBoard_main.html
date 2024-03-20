@@ -18,7 +18,7 @@ $recBTN = '';
 $update = '';
 $delete = '';
 
-if (isset($_SESSION['id'])) {
+if (isset ($_SESSION['id'])) {
 
    //내 글일 때
    if ($writer == $_SESSION['id']) {
@@ -29,7 +29,7 @@ if (isset($_SESSION['id'])) {
    } else if ($writer != $_SESSION['id']) {
 
       //view 파라미터 사용하여, 추천한 후 글로 돌아올 때 조회수 증가 방지 
-      if (!isset($_GET['view'])) {
+      if (!isset ($_GET['view'])) {
          $sql = "UPDATE notice SET checked = checked + 1 WHERE idx={$_GET['idx']}";
          $result = mysqli_query($conn, $sql);
       }
@@ -54,7 +54,7 @@ if (isset($_SESSION['id'])) {
    }
 
 } else {
-   if (!isset($_GET['view'])) {
+   if (!isset ($_GET['view'])) {
       $sql = "UPDATE notice SET checked = checked + 1 WHERE idx={$_GET['idx']}";
       $result = mysqli_query($conn, $sql);
    }
@@ -73,7 +73,11 @@ $resultrp = mysqli_query($conn, $sqladd);
 $sql = "SELECT * FROM notice WHERE idx={$_GET['idx']}";
 $result = mysqli_query($conn, $sql);
 
+
+
 $arr = mysqli_fetch_array($result);
+
+$fileArr = explode(",", $arr['ufile']);
 
 $idx = $arr['idx'];
 $head = $arr['head'];
@@ -126,7 +130,7 @@ $result = mysqli_query($conn, $sql);
    <h1><a href="index.html">게시판</a></h1>
    <div>
       <?php
-      if (isset($_SESSION['id'])) {
+      if (isset ($_SESSION['id'])) {
          echo $_SESSION['id'] . "로 접속중...";
       } else {
          echo "<h3><a href=\"regi.html\">로그인 및 회원가입</a></h3>";
@@ -164,7 +168,13 @@ $result = mysqli_query($conn, $sql);
    <hr>
    <div>
       글 내용 :<br>
-      <?= nl2br($description); ?>
+      <?php echo nl2br($description)."<br><br>";
+
+      //업로드 파일 출력
+      for ($i = 0; $i < count($fileArr); $i++) {
+         echo "<img src='./userupload/file/{$fileArr[$i]}' alt='img' width='300px' height='240px'/>";
+      }
+      ?>
    </div>
    <br>
    <hr>
@@ -189,7 +199,9 @@ $result = mysqli_query($conn, $sql);
 
 
    <div>
-      <h3>댓글 [<?=$rep?>]</h3>
+      <h3>댓글 [
+         <?= $rep ?>]
+      </h3>
       <?php
       $sql = "SELECT * FROM reply WHERE notice_idx='{$_GET['idx']}' ORDER BY idx ASC";
       $result = mysqli_query($conn, $sql);
@@ -212,10 +224,9 @@ $result = mysqli_query($conn, $sql);
          <hr>
 
          <?php
-
       }
 
-      if (isset($_SESSION['id']) && isset($_SESSION['pw'])) {
+      if (isset ($_SESSION['id']) && isset ($_SESSION['pw'])) {
          $id = $_SESSION['id'];
          $pw = $_SESSION['pw'];
       } else {
