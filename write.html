@@ -2,7 +2,7 @@
 session_cache_limiter();
 session_start();
 
-if(!isset($_SESSION['id'])) {
+if (!isset ($_SESSION['id'])) {
    echo "<script>alert('회원만 글 작성이 가능합니다. 회원가입 해주세요.');location.href='regi.html';</script>";
 }
 ?>
@@ -14,42 +14,81 @@ if(!isset($_SESSION['id'])) {
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <title>글 작성</title>
+
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" 
+   integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" 
+   crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 
+
+
 <body>
+
+
+
+
    <!-- 비회원 글쓰기 방지 -->
    <?php
-      if(isset($_SESSION['id'])) {
-         echo "<form id=\"writeForm\" action=\"writeProcess.php\" method=\"post\" enctype=\"multipart/form-data\">";
-      }
+   if (isset ($_SESSION['id'])) {
+      echo "<form id=\"writeForm\" action=\"writeProcess.php\" method=\"post\" enctype=\"multipart/form-data\">";
+   }
    ?>
    <!-- 비회원 글쓰기 방지 -->
    <p><a href="index.html">X</a></p>
-      <fieldset>
-         <legend>글 작성</legend>
-         <p><select name="head" form="writeForm">
+   <fieldset>
+      <legend>글 작성</legend>
+      <p><select name="head" form="writeForm">
             <?php
             $adminPattern = "/admin/i";
-            if(preg_match($adminPattern, $_SESSION['id'])) {
+            if (preg_match($adminPattern, $_SESSION['id'])) {
                echo "<option value=\"notice\">공지</option>";
             }
             ?>
-               
-               <option value="normal">일반</option>
-               <option value="question">질문</option>
-               <option value="vote">투표</option>
-            </select>
-            <input type="text" name="title" placeholder="제목" required>
-         </p>
-         <p><textarea name="description" required placeholder="본문" rows="20px" cols="70px"></textarea></p>
-         <!-- 파일 업로드 추가 -->
-         <!-- 최대 파일사이즈 설정 -->
-         <!-- <input type="hidden" value="30000" name="max_file_size"> -->
-         <input type='file' name="userfile[]" multiple>
 
-         <p><input type="submit" value="글 작성"></p>
-      </fieldset>
+            <option value="normal">일반</option>
+            <option value="question">질문</option>
+            <option value="vote">투표</option>
+         </select>
+         <input type="text" name="title" placeholder="제목" required>
+      </p>
+      <p><textarea name="description" required placeholder="본문" rows="20px" cols="70px"></textarea></p>
+      <!-- 파일 업로드 추가 -->
+      <!-- 최대 파일사이즈 설정 -->
+      <!-- <input type="hidden" value="30000" name="max_file_size"> -->
+      <input type='file' id='image' name='userfile[]' onchange='setview(event)' onclick='removechild()' multiple>
+      <br>
+      <!-- 이미지 미리보기 -->
+      <div id="image_container"></div>
+
+      <p><input type="submit" value="글 작성"></p>
+   </fieldset>
    </form>
+
+   <!-- 이미지 미리보기 -->
+   <script>
+
+         // 이미지 제거
+      function removechild() {
+         $('#image_container').empty();
+      }
+
+      function setview(event) {
+         for (var image of event.target.files) {
+            var reader = new FileReader();
+
+            reader.onload = function (event) {
+
+               var img = document.createElement("img");
+               img.setAttribute("src", event.target.result);
+               img.setAttribute("style", "width:300px; height:200px;");
+               document.querySelector("div#image_container").appendChild(img);
+            };
+            console.log(image);
+            reader.readAsDataURL(image);
+         }
+
+      }
+   </script>
 </body>
 
 </html>

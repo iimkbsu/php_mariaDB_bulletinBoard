@@ -31,6 +31,8 @@ $conn = mysqli_connect($dbhost, $dbid, $dbpw, $dbname);
 $sql = "SELECT * FROM notice ORDER BY idx DESC";
 $result = mysqli_query($conn, $sql);
 
+$total_notice = mysqli_num_rows($result);
+
 
 //게시글 페이지수 구현
 $page;
@@ -39,7 +41,6 @@ if (isset ($_GET['page'])) {
 } else {
    $page = 1;
 }
-$total_notice = mysqli_num_rows($result);
 
 $per = 10; //한 페이지에 보여줄 게시글 수
 $start = ($page - 1) * $per + 1;
@@ -75,7 +76,11 @@ while ($noticeBoard = mysqli_fetch_array($result)) {
    $list .= "<tr>
       <td>{$noticeBoard['idx']}</td>
       <td>{$noticeBoard['head']}</td>
-      <td id='line_limit'><a href='bulletinBoard_main.html?idx={$noticeBoard['idx']}'>" . mb_substr($noticeBoard['title'], 0, 20) . "</a> [" . $noticeBoard['rep'] . "]</td>
+      <td id='line_limit'><a href='bulletinBoard_main.html?idx={$noticeBoard['idx']}'>";
+      if($noticeBoard['ufile']) {
+         $list .= "▣ ";
+      }
+   $list .= mb_substr($noticeBoard['title'], 0, 20) . "</a> [" . $noticeBoard['rep'] . "]</td>
       <td id='line_limit'>" . mb_substr($noticeBoard['description'], 0, 30) . "</td>
       <td>{$noticeBoard['writer']}</td>
       <td>{$noticeBoard['created']}</td>

@@ -76,6 +76,7 @@ $result = mysqli_query($conn, $sql);
 
 
 $arr = mysqli_fetch_array($result);
+$farr = $arr['ufile'];
 
 $fileArr = explode(",", $arr['ufile']);
 
@@ -167,13 +168,23 @@ $result = mysqli_query($conn, $sql);
    </div>
    <hr>
    <div>
-      글 내용 :<br>
-      <?php echo nl2br($description)."<br><br>";
-
+      글 내용 :<br><br>
+      <?php
       //업로드 파일 출력
-      for ($i = 0; $i < count($fileArr); $i++) {
-         echo "<img src='./userupload/file/{$fileArr[$i]}' alt='img' width='300px' height='240px'/>";
+      if ($farr != null) {
+         for ($i = 0; $i < count($fileArr); $i++) {
+            
+            echo "<img src='./userupload/file/{$fileArr[$i]}' alt='img' width='300px' height='240px'/><br>";
+         }
       }
+
+      echo "<br>".nl2br($description) . "<br><br>";
+
+
+
+
+
+
       ?>
    </div>
    <br>
